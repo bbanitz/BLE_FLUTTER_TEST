@@ -1,11 +1,9 @@
 //import 'dart:html';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+
 import 'package:provider/provider.dart';
 import 'package:test_ble_2/provider/bleProvider.dart';
-
-final _ble = FlutterReactiveBle();
 
 String deviceId = "";
 
@@ -68,8 +66,8 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       //getDevices();
-      connect();
-      _counter++;
+      Provider.of<BleProvider>(context, listen: false).getDevices();
+      //_counter++;
     });
   }
 
@@ -105,13 +103,19 @@ class _MyHomePageState extends State<MyHomePage> {
           // center the children vertically; the main axis here is the vertical
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
+
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            TextButton(
+                onPressed: () {
+                  Provider.of<BleProvider>(context, listen: false).connect();
+                },
+                child: Text("connect")),
             Text(
-              'You have pushed the button this many times:',
+              'Compteur',
             ),
             Text(
-              '$_counter',
+              '${Provider.of<BleProvider>(context, listen: true).counter}',
               style: Theme.of(context).textTheme.headline4,
             ),
           ],

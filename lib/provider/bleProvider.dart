@@ -8,15 +8,16 @@ class BleProvider with ChangeNotifier {
 
   getDevices() {
     print("GET DEVICES");
-    _ble.scanForDevices(withServices: [], scanMode: ScanMode.lowLatency).listen(
-        (device) {
-      deviceId = device.id;
+    _ble.scanForDevices(
+        withServices: [],
+        requireLocationServicesEnabled: false,
+        scanMode: ScanMode.lowLatency).listen((device) {
       print(device);
       print(device.name);
-      deviceId = device.id;
       print(device.id);
       print(device.serviceData);
       print(device.manufacturerData);
+      deviceId = device.id;
     }, onError: (err) {
       //code for handling error
       print("ERREUR : $err");
@@ -26,7 +27,7 @@ class BleProvider with ChangeNotifier {
   connect() {
     _ble
         .connectToDevice(
-      id: "AC:67:B2:39:6E:36",
+      id: deviceId,
       /*
     servicesWithCharacteristicsToDiscover: {
       serviceId: []
@@ -43,11 +44,12 @@ class BleProvider with ChangeNotifier {
             serviceId: Uuid.parse("042bd80f-14f6-42be-a45c-a62836a4fa3f"),
             characteristicId:
                 Uuid.parse("065de41b-79fb-479d-b592-47caf39bfccb"),
-            deviceId: "AC:67:B2:39:6E:36");
+            deviceId: deviceId);
         _ble.subscribeToCharacteristic(characteristic).listen((data) {
           // code to handle incoming data
-          print(data.first);
-          counter = data.first;
+          print(data);
+
+          counter = data[0] + data[1] * 256;
           notifyListeners();
         }, onError: (dynamic error) {
           print(error); // code to handle errors
