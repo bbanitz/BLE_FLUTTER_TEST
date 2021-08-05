@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_ble_2/provider/bleProvider.dart';
 
-String deviceId = "";
+//String deviceId = "";
 
 void main() {
   runApp(MyApp());

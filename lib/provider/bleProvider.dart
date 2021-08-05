@@ -8,16 +8,20 @@ class BleProvider with ChangeNotifier {
 
   getDevices() {
     print("GET DEVICES");
+    Uuid serv = Uuid.parse("042bd80f-14f6-42be-a45c-a62836a4fa3f");
     _ble.scanForDevices(
         withServices: [],
         requireLocationServicesEnabled: false,
         scanMode: ScanMode.lowLatency).listen((device) {
-      print(device);
-      print(device.name);
-      print(device.id);
-      print(device.serviceData);
-      print(device.manufacturerData);
-      deviceId = device.id;
+      if (device.name == "MonESP32") {
+        print(device);
+        print(device.name);
+        print(device.id);
+        print(device.serviceData);
+        print(device.manufacturerData);
+        this.deviceId = device.id;
+        connect();
+      }
     }, onError: (err) {
       //code for handling error
       print("ERREUR : $err");
@@ -25,6 +29,7 @@ class BleProvider with ChangeNotifier {
   }
 
   connect() {
+    print("device id : ${this.deviceId}");
     _ble
         .connectToDevice(
       id: deviceId,
