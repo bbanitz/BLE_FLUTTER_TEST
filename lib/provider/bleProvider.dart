@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
@@ -5,7 +7,12 @@ class BleProvider with ChangeNotifier {
   final _ble = FlutterReactiveBle();
   int counter = 0;
   String deviceId = "";
-
+  // ignore: close_sinks
+  StreamController<int> bleController = StreamController.broadcast();
+  Stream<int>? bleStream;
+  BleProvider() {
+    bleStream = bleController.stream;
+  }
   getDevices() {
     print("GET DEVICES");
     Uuid serv = Uuid.parse("042bd80f-14f6-42be-a45c-a62836a4fa3f");
@@ -55,7 +62,8 @@ class BleProvider with ChangeNotifier {
           print(data);
 
           counter = data[0] + data[1] * 256;
-          notifyListeners();
+          //notifyListeners();
+          bleController.add(counter);
         }, onError: (dynamic error) {
           print(error); // code to handle errors
         });

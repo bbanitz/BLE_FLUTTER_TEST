@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import 'package:test_ble_2/provider/bleProvider.dart';
+import 'provider/bleProvider.dart';
 
 //String deviceId = "";
 
@@ -114,10 +114,15 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               'Compteur',
             ),
-            Text(
-              '${Provider.of<BleProvider>(context, listen: true).counter}',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            StreamBuilder<Object>(
+                stream:
+                    Provider.of<BleProvider>(context, listen: false).bleStream,
+                builder: (context, snapshot) {
+                  return Text(
+                    '${snapshot.data}',
+                    style: Theme.of(context).textTheme.headline4,
+                  );
+                }),
           ],
         ),
       ),
